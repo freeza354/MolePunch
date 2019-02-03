@@ -4,21 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     
-    /*
-    public class Tiles
-    {
-        public Transform[] Tile;
-        public bool[] isFilled = new bool[25];
-
-        public Tiles()
-        {
-            for (int i = 0; i < isFilled.Length; i++)
-            {
-                isFilled[i] = false;
-            }
-        }
-
-    }*/
+    public static GameManager gameManager;
 
     public Text scoretext;
     public Transform Board;
@@ -27,11 +13,17 @@ public class GameManager : MonoBehaviour {
     public Transform[] Tile;
     public bool[] isFilled = new bool[25];
 
-    public static int score;
-    public static int counter = 0;
-    
-	// Use this for initialization
-	void Start () {
+    public int randomTile;
+    public int score;
+    public int counter = 0;
+
+    private void Awake()
+    {
+        gameManager = this;
+    }
+
+    // Use this for initialization
+    void Start () {
         
         score = 0;
 
@@ -63,21 +55,21 @@ public class GameManager : MonoBehaviour {
     {
         while (true)
         {
-            print("called");
-
-            int random;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 11; i++)
             {
-                random = Random.Range(1, 25);
-                print(random);
-                while (isFilled[random - 1])
-                {
-                    random = Random.Range(1, 25);
-                }
+                RandomNumber();
 
-                isFilled[random - 1] = true;
-                Instantiate(activeTile, Tile[random - 1].position, Tile[random - 1].rotation);
+                while (isFilled[randomTile])
+                {
+                    print(randomTile + " tile is already activated. Randoming number again...");
+                    RandomNumber();
+                }
+                
+                isFilled[randomTile] = true;
+
+                Instantiate(activeTile, Tile[randomTile - 1].position, Tile[randomTile - 1].rotation);
                 counter++;
+                print(randomTile + " is " + isFilled[randomTile] + " and total counter are : " + counter);
             }
 
             yield return new WaitForSeconds(5);
@@ -86,9 +78,20 @@ public class GameManager : MonoBehaviour {
 
     }
 
+    void RandomNumber()
+    {
+        randomTile = Random.Range(1, 25);
+
+        while (isFilled[randomTile - 1])
+        {
+            randomTile = Random.Range(1, 25);
+        }
+    }
+
     void GameOver()
     {
         StopAllCoroutines();
+        print("Game Over!");
     }
 
 }

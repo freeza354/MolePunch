@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class tileScript : MonoBehaviour {
 
+    public int tileNumber;
+    public int tileDestroy;
+
 	// Use this for initialization
 	void Start () {
-		
+        
+        tileNumber = GameManager.gameManager.randomTile;       
+
 	}
 	
 	// Update is called once per frame
@@ -16,8 +21,10 @@ public class tileScript : MonoBehaviour {
     
     void OnMouseDown()
     {
-        GameManager.score++;
-        GameManager.counter--;
+        GameManager.gameManager.score++;
+        GameManager.gameManager.counter--;
+        GameManager.gameManager.isFilled[tileNumber] = false;
+        print(tileNumber + "tile destroyed!");
         Destroy(gameObject);
     }  
 
